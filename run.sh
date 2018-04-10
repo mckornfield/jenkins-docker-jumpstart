@@ -10,5 +10,5 @@ JENKINS_SECRETS=$DIR/secrets
 docker run -p 8080:8080 -p 50000:50000 \
   -v $JENKINS_HOME:/Users/jenkins_home \
   -v $JENKINS_SECRETS:/secrets \
-  --name jenkins \
+  --name jenkins -d \
   $IMAGE
