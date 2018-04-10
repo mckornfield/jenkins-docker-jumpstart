@@ -1,0 +1,7 @@
+ansicolor:0.5.2
+htmlpublisher:1.15
+rebuild:1.28
+jclouds-jenkins
+token-macro
+durable-task
+docker-plugin
