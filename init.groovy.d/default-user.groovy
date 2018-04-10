@@ -1,17 +1,21 @@
+#!groovy
+
 import jenkins.model.*
 import hudson.security.*
 
 def env = System.getenv()
+def instance = Jenkins.getInstance()
 
-def jenkins = Jenkins.getInstance()
-jenkins.setSecurityRealm(new HudsonPrivateSecurityRealm(false))
-jenkins.setAuthorizationStrategy(new GlobalMatrixAuthorizationStrategy())
+println "--> creating local user '" + env.JENKINS_USER + "'"
+
+def hudsonRealm = new HudsonPrivateSecurityRealm(false)
 
 file = new File("/secrets/jenkins_admin_password")
 password = file.text.trim()
 
-def user = jenkins.getSecurityRealm().createAccount(env.JENKINS_USER, password)
-user.save()
+hudsonRealm.createAccount(env.JENKINS_USER,password)
+instance.setSecurityRealm(hudsonRealm)
 
-jenkins.getAuthorizationStrategy().add(Jenkins.ADMINISTER, env.JENKINS_USER)
-jenkins.save()
+def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
+instance.setAuthorizationStrategy(strategy)
+instance.save()

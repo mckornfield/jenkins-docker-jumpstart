@@ -16,9 +16,14 @@ if [ ! -d $JENKINS_HOME ]; then
 fi
 
 if [ ! -d $JENKINS_SECRETS ]; then
-  echo "Creating secrets directory in current folder with default password 'a'"
   mkdir $JENKINS_SECRETS
-  echo "a" >> $JENKINS_SECRETS/jenkins_admin_password # REPLACE THE FOLLOWING TO MAKE MORE SECURE
+  if [[ -z $1 ]]; then
+    echo "Creating secrets directory in current folder with default password 'a'"
+    echo "a" >> $JENKINS_SECRETS/jenkins_admin_password
+  else
+    echo "Using passed in password"
+    echo $1 >> $JENKINS_SECRETS/jenkins_admin_password
+  fi
 fi
 
 $DIR/run.sh
