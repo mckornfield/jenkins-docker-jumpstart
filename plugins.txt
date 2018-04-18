@@ -14,5 +14,6 @@ scm-sync-configuration:0.0.10
 ssh-agent:1.15
 ssh-credentials:1.13
 ssh-slaves:1.26
+rvm:0.6
 token-macro:2.4
 workflow-aggregator:2.4
