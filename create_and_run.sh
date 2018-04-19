@@ -4,7 +4,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 IMAGE=jumpstart/jenkins:latest
 
-docker build --no-cache $DIR -t $IMAGE
+docker build --no-cache $DIR/build_files -t $IMAGE
 docker system prune -f 
 
 JENKINS_HOME=$DIR/jenkins_home
