@@ -16,29 +16,38 @@ ENV JAVA_OPTS "-XX:+UnlockExperimentalVMOptions \
     -Dhudson.security.csrf.requestfield=Jenkins-Crumb \
     -Dpermissive-script-security.enabled=true"
 
-# Install Android SDK
-ENV ANDROID_SDK_VERSION 24.4.1
+# Set Android properties and download zip
+ENV ANDROID_SDK_VERSION 25.2.5
 
-ENV ANDROID_SDK_ZIP android-sdk_r$ANDROID_SDK_VERSION-linux.tgz
-ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/$ANDROID_SDK_ZIP
+ENV ANDROID_SDK_ZIP android-sdk-tools.zip
+ENV ANDROID_SDK_ZIP_URL https://dl.google.com/android/repository/tools_r$ANDROID_SDK_VERSION-linux.zip
 ENV ANDROID_HOME /opt/android-sdk-linux
 
-ENV PATH $PATH:$ANDROID_HOME/tools
-ENV PATH $PATH:$ANDROID_HOME/platform-tools
+ENV PATH $PATH:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
 
-ADD $ANDROID_SDK_ZIP_URL /opt/
 USER root
-RUN tar xzvf opt/$ANDROID_SDK_ZIP -C /opt/ && \
-  rm /opt/$ANDROID_SDK_ZIP && \
+
+# Install android
+RUN wget $ANDROID_SDK_ZIP_URL -O /tmp/$ANDROID_SDK_ZIP && \
+  mkdir -p $ANDROID_HOME && \
+  unzip -q /tmp/$ANDROID_SDK_ZIP -d $ANDROID_HOME && \
+  rm /tmp/$ANDROID_SDK_ZIP
+
+RUN mkdir -p ~/.android && touch ~/.android/repositories.cfg && \
   echo y | sdkmanager tools && \
-  mkdir -p ~/.android && touch ~/.android/repositories.cfg && \
   sdkmanager platform-tools && \
   sdkmanager "platforms;android-25" && \
-  sdkmanager "build-tools;27.0.3`" && \
+  sdkmanager "build-tools;27.0.3" && \
   sdkmanager "extras;google;m2repository" && \
   sdkmanager "extras;android;m2repository" && \
-  yes | sdkmanager --licenses && \
+  echo y | sdkmanager --licenses && \
   chmod -R 777 $ANDROID_HOME && \
   chown -R jenkins:jenkins $ANDROID_HOME
+
+RUN apk --no-cache add ca-certificates wget && \
+  wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://raw.githubusercontent.com/sgerrand/alpine-pkg-glibc/master/sgerrand.rsa.pub && \
+  wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.27-r0/glibc-2.27-r0.apk && \
+  apk add glibc-2.27-r0.apk && \
+  rm -rf /var/cache/apk/*
 
 USER jenkins
