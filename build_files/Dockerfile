@@ -30,7 +30,14 @@ ADD $ANDROID_SDK_ZIP_URL /opt/
 USER root
 RUN tar xzvf opt/$ANDROID_SDK_ZIP -C /opt/ && \
   rm /opt/$ANDROID_SDK_ZIP && \
-  echo "y" | android update sdk -u -a --filter platform-tools,android-25,build-tools-26.0.2 && \
+  echo y | sdkmanager tools && \
+  mkdir -p ~/.android && touch ~/.android/repositories.cfg && \
+  sdkmanager platform-tools && \
+  sdkmanager "platforms;android-25" && \
+  sdkmanager "build-tools;27.0.3`" && \
+  sdkmanager "extras;google;m2repository" && \
+  sdkmanager "extras;android;m2repository" && \
+  yes | sdkmanager --licenses && \
   chmod -R 777 $ANDROID_HOME && \
   chown -R jenkins:jenkins $ANDROID_HOME
 
