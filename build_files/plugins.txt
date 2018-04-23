@@ -10,6 +10,7 @@ github-api:1.89
 jclouds-jenkins:2.14
 rebuild:1.28
 scm-sync-configuration:0.0.10
+sonar:2.7.1
 ssh-agent:1.15
 ssh-credentials:1.13
 ssh-slaves:1.26
