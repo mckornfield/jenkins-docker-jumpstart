@@ -7,8 +7,10 @@ git-client:2.7.0
 git-server:1.7
 git:3.8.0
 github-api:1.89
+htmlpublisher:1.16
 jclouds-jenkins:2.14
 rebuild:1.28
+role-strategy:2.7.0
 scm-sync-configuration:0.0.10
 sonar:2.7.1
 ssh-agent:1.15
