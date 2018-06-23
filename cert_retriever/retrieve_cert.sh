@@ -9,4 +9,4 @@ certbot/certbot \
 certonly --webroot \
 --register-unsafely-without-email --agree-tos \
 --webroot-path=/data/letsencrypt \
--d ci.treetracker.org 
+-d $1
