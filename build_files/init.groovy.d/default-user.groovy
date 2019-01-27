@@ -16,7 +16,6 @@ password = file.text.trim()
 hudsonRealm.createAccount(env.JENKINS_USER,password)
 instance.setSecurityRealm(hudsonRealm)
 
-def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
-stategy.setAllowAnonymousRead(false);
+def strategy = new GlobalMatrixAuthorizationStrategy()
 instance.setAuthorizationStrategy(strategy)
 instance.save()
