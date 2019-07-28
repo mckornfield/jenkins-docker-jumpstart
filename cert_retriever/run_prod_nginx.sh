@@ -15,4 +15,4 @@ docker run -p "80:80" \
 -v $PWD/cert-volumes/etc/letsencrypt/live/$1/fullchain.pem:/etc/letsencrypt/live/ci.treetracker.org/fullchain.pem \
 -v $PWD/cert-volumes/etc/letsencrypt/live/$1/privkey.pem:/etc/letsencrypt/live/ci.treetracker.org/privkey.pem \
 --name prod-nginx \
--d nginx:latest
+-d nginx:latest nginx-debug -g 'daemon off;'

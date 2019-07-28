@@ -14,21 +14,24 @@ fi
 
 mkdir -p ${REGISTRY_DIR}
 
-mkdir -p ${AUTH_DIR}
 
-PW=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-echo "Password is $PW"
-echo "$PW" > ${AUTH_DIR}/registrypass.txt
+if [[ $1 ]]; then
+  mkdir -p ${AUTH_DIR}
+  PW=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+  echo "Password is $PW"
+  echo "$PW" > ${AUTH_DIR}/registrypass.txt
 
-docker run \
-  --entrypoint htpasswd \
-  registry:2 -Bbn admin $PW > auth/htpasswd
+  docker run \
+    --entrypoint htpasswd \
+    registry:2 -Bbn admin $PW > auth/htpasswd
+
+fi
 
 docker container stop registry
 docker container rm registry
 
 docker run -d \
-  -p 4443:443 \
+  -p 443:443 \
   --restart=always \
   --name registry \
   -v $AUTH_DIR:/auth \
